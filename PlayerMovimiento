@@ -7,7 +7,9 @@ public class PlayerMovimiento : MonoBehaviour
     private CharacterController controlador;
 
     [Header("Movimiento")]
+    [SerializeField] private bool UsaGetAxisRaw;
     [SerializeField] private float velocidadMovimiento = 5f;
+    
 
     [Header("Gravedad")]
     [SerializeField] private float GravedadDelJugador = -9f;
@@ -30,9 +32,8 @@ public class PlayerMovimiento : MonoBehaviour
     private void MoverJugadorEnPlano()
     {
         //Capturamos las teclas (AWSD y Flechas)
-        float ValorHorizontal =Input.GetAxisRaw("Horizontal");
-        float ValorVertical =Input.GetAxisRaw("Vertical");
-
+        float ValorHorizontal = UsaGetAxisRaw ? Input.GetAxisRaw("Horizontal") : Input.GetAxis("Horizontal");
+        float ValorVertical = UsaGetAxisRaw ? Input.GetAxisRaw("Vertical") : Input.GetAxis("Vertical");
         //Calculamos hacia donde mira la camara solo en Eje (Adelante y atras) y (Detecha y Izquierda)
         Vector3 adelanteCamara = camara.forward;
         Vector3 derechaCamara = camara.right;
@@ -63,7 +64,7 @@ public class PlayerMovimiento : MonoBehaviour
         //Aplica fuerza de gravedad
         velocidadVertical.y += GravedadDelJugador * Time.deltaTime;
         //Mueve al jugador con la gravedad
-        controlador.Move (velocidadVertical * Time.deltaTime);
+        controlador.Move(velocidadVertical * Time.deltaTime);
 
         //Controla que Si esta callendo tenga un peso al caer controlado
         if (controlador.isGrounded && velocidadVertical.y < 0)
